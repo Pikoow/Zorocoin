@@ -63,7 +63,7 @@ module.exports = {
         await Promise.all([cooldown.save(), user.save()]);
 
         await interaction.editReply(
-            `YOU LOSE... You received no zorocoins! You still have ${user.balance} zorocoins.`
+            `YOU LOSE... You received no zorocoins! You still have **${user.balance}** zorocoins.`
         );
       }
     } catch (error) {

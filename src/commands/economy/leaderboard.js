@@ -29,7 +29,7 @@ module.exports = {
       const leaderboard = await Promise.all(
         topUsers.map(async (user, index) => {
           const discordUser = await client.users.fetch(user.userId); // Fetch Discord user
-          return `${index + 1}. **${discordUser.displayName}** - ${user.balance} zorocoins`; // Use username instead of userId
+          return `${index + 1}. **${discordUser.displayName}** - **${user.balance}** zorocoins`; // Use username instead of userId
         })
       );
 
