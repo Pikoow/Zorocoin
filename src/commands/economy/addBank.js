@@ -1,4 +1,4 @@
-const { Client, Interaction } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
 const Bank = require('../../models/Bank');
 
 module.exports = {
