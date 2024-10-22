@@ -27,7 +27,7 @@ module.exports = {
 
       let cooldown = await Cooldown.findOne({ userId, commandName, guildId });
 
-      let bank = await Cooldown.findOne({ guildId: guildId });
+      let bank = await Bank.findOne({ guildId: guildId });
 
       if (!bank) {
         bank = new Bank({ guildId: guildId });
