@@ -5,8 +5,8 @@ const Cooldown = require('../../models/Cooldown');
 const dailyAmount = 1000;
 
 module.exports = {
-  name: 'daily',
-  description: 'Collect your dailies!',
+  name: 'play',
+  description: '50% chance to win 100 zorocoins !',
 
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) {
@@ -20,7 +20,7 @@ module.exports = {
     try {
       await interaction.deferReply();
 
-      const commandName = 'daily';
+      const commandName = 'play';
       const userId = interaction.user.id;
       const guildId = interaction.guild.id;
 
@@ -45,16 +45,27 @@ module.exports = {
         user = new User({ userId, guildId });
       }
 
-      const zorocoins = 50;
-
-      user.balance = user.balance + zorocoins;
+      const zorocoins = 100;
 
       cooldown.endsAt = Date.now() + 300_000;
-      await Promise.all([cooldown.save(), user.save()]);
 
-      await interaction.editReply(
-        `You received **${zorocoins}** zorocoins! You now have **${user.balance}** zorocoins.`
-      );
+      const number = Math.floor(Math.random() * 2) + 1;
+      console.log(number);
+
+      if (number == 1) {
+        user.balance = user.balance + zorocoins;
+        await Promise.all([cooldown.save(), user.save()]);
+
+        await interaction.editReply(
+            `YOU WIN ! You received **${zorocoins}** zorocoins! You now have **${user.balance}** zorocoins.`
+        );
+      } else {
+        await Promise.all([cooldown.save(), user.save()]);
+
+        await interaction.editReply(
+            `YOU LOSE... You received no zorocoins! You still have ${user.balance} zorocoins.`
+        );
+      }
     } catch (error) {
       console.log(`Error with /daily: ${error}`);
     }
