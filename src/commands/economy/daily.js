@@ -49,7 +49,7 @@ module.exports = {
 
       user.balance = user.balance + zorocoins;
 
-      cooldown.endsAt = Date.now() + 300_000;
+      cooldown.endsAt = Date.now() + 86_400_000;
       await Promise.all([cooldown.save(), user.save()]);
 
       await interaction.editReply(

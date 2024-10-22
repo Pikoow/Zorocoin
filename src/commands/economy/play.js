@@ -47,10 +47,9 @@ module.exports = {
 
       const zorocoins = 100;
 
-      cooldown.endsAt = Date.now() + 300_000;
+      cooldown.endsAt = Date.now() + 86_400_000;
 
       const number = Math.floor(Math.random() * 2) + 1;
-      console.log(number);
 
       if (number == 1) {
         user.balance = user.balance + zorocoins;
