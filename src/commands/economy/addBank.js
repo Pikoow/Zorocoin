@@ -2,7 +2,7 @@ const { Client, Interaction, ApplicationCommandOptionType } = require('discord.j
 const Bank = require('../../models/Bank');
 
 module.exports = {
-  name: 'addBank',
+  name: 'addbank',
   description: 'Add money to the bank.',
   options: [
     {
