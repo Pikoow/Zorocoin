@@ -24,7 +24,7 @@ module.exports = {
       const userId = interaction.user.id;
       const guildId = interaction.guild.id;
 
-      let cooldown = await Cooldown.findOne({ userId, commandName });
+      let cooldown = await Cooldown.findOne({ userId, commandName, guildId });
 
       if (cooldown && Date.now() < cooldown.endsAt) {
         const { default: prettyMs } = await import('pretty-ms');
@@ -36,7 +36,7 @@ module.exports = {
       }
 
       if (!cooldown) {
-        cooldown = new Cooldown({ userId, commandName });
+        cooldown = new Cooldown({ userId, commandName, guildId });
       }
 
       let user = await User.findOne({ userId });
