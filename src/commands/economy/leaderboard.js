@@ -22,7 +22,7 @@ module.exports = {
         .sort({ balance: -1 })
         .limit(10);
 
-      const bank = await Bank.find({ guildId: interaction.guild.id });
+      const bank = await Bank.findOne({ guildId: interaction.guild.id });
 
       if (topUsers.length === 0) {
         await interaction.editReply('No users found in the leaderboard.');
