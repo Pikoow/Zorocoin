@@ -30,9 +30,8 @@ module.exports = {
       let bank = await Cooldown.findOne({ guildId: guildId });
 
       if (!bank) {
-        bank = new Cooldown({ guildId: guildId });
+        bank = new Bank({ guildId: guildId });
       }
-
 
       if (cooldown && Date.now() < cooldown.endsAt) {
         const { default: prettyMs } = await import('pretty-ms');
