@@ -36,7 +36,7 @@ module.exports = {
         })
       );
 
-      await interaction.editReply(`**Bank**\n${bank.balance}**Zorocoins Leaderboard**\n${leaderboard.join('\n')}`);
+      await interaction.editReply(`**Bank**\n${bank.balance}\n**Zorocoins Leaderboard**\n${leaderboard.join('\n')}`);
     } catch (error) {
       console.log(`Error with /leaderboard: ${error}`);
       await interaction.editReply('An error occurred while fetching the leaderboard.');

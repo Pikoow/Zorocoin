@@ -27,7 +27,12 @@ module.exports = {
 
       let cooldown = await Cooldown.findOne({ userId, commandName, guildId });
 
-      let bank = await Cooldown.findOne({ guildId });
+      let bank = await Cooldown.findOne({ guildId: guildId });
+
+      if (!bank) {
+        bank = new Cooldown({ guildId: guildId });
+      }
+
 
       if (cooldown && Date.now() < cooldown.endsAt) {
         const { default: prettyMs } = await import('pretty-ms');
@@ -36,10 +41,6 @@ module.exports = {
           `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``
         );
         return;
-      }
-
-      if (!bank) {
-        bank = new Cooldown({ guildId });
       }
 
       if (!cooldown) {
