@@ -52,18 +52,6 @@ const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
                 description: 'Displays the top 10 users with the most zorocoins',
             },
             {
-                name: 'minusbank',
-                description: 'Remove money from the bank.',
-                options: [
-                  {
-                    name: 'zorocoins',
-                    description: 'The number of zorocoins you want to remove.',
-                    type: ApplicationCommandOptionType.Number,
-                    required: true,
-                  },
-                ],
-            },
-            {
                 name: 'play',
                 description: '50% chance to win 100 zorocoins !',              
             },

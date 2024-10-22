@@ -5,6 +5,8 @@ const Bank = require('../src/schemas/Bank');
 const Cooldown = require('../src/schemas/Cooldown');
 const User = require('../src/schemas/User');
 
+const dailyAmount = 5;
+
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -229,39 +231,7 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.editReply('An error occurred while fetching the leaderboard.');
           }
     }
-    
-    if (interaction.commandName === "minusbank") {
-        if (!interaction.inGuild()) {
-            interaction.reply({
-              content: 'You can only run this command inside a server.',
-              ephemeral: true,
-            });
-            return;
-          }
-      
-          try {      
-            const guildId = interaction.guild.id;
-      
-            let bank = await Bank.findOne({ guildId: guildId });
-      
-            if (!bank) {
-              bank = new Bank({ guildId: guildId });
-            }
-      
-            const amount = interaction.options.getNumber('zorocoins');
-      
-            bank.balance = bank.balance - amount;
-      
-            await Promise.all([bank.save()]);
-      
-            await interaction.reply(
-              `Added **${amount}** zorocoins to the bank.`
-            );
-          } catch (error) {
-            console.log(`Error with /daily: ${error}`);
-          }
-    }
-    
+
     if (interaction.commandName === "play") {
         if (!interaction.inGuild()) {
             interaction.reply({
