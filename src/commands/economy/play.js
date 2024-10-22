@@ -45,7 +45,7 @@ module.exports = {
         user = new User({ userId, guildId });
       }
 
-      const zorocoins = 100;
+      const zorocoins = 50;
 
       cooldown.endsAt = Date.now() + 86_400_000;
 
@@ -59,6 +59,7 @@ module.exports = {
             `YOU WIN ! You received **${zorocoins}** zorocoins! You now have **${user.balance}** zorocoins.`
         );
       } else {
+        user.balance = user.balance - zorocoins;
         await Promise.all([cooldown.save(), user.save()]);
 
         await interaction.editReply(
