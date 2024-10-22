@@ -1,5 +1,6 @@
 const { Client, Interaction } = require('discord.js');
 const User = require('../../models/User');
+const Bank = require('../../models/Bank');
 
 module.exports = {
   name: 'leaderboard',
@@ -21,6 +22,8 @@ module.exports = {
         .sort({ balance: -1 })
         .limit(10);
 
+      const bank = await Bank.find({ guildId: interaction.guild.id });
+
       if (topUsers.length === 0) {
         await interaction.editReply('No users found in the leaderboard.');
         return;
@@ -33,7 +36,7 @@ module.exports = {
         })
       );
 
-      await interaction.editReply(`**Zorocoins Leaderboard**\n${leaderboard.join('\n')}`);
+      await interaction.editReply(`**Bank**\n${bank.balance}**Zorocoins Leaderboard**\n${leaderboard.join('\n')}`);
     } catch (error) {
       console.log(`Error with /leaderboard: ${error}`);
       await interaction.editReply('An error occurred while fetching the leaderboard.');

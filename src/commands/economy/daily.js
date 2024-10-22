@@ -1,6 +1,7 @@
 const { Client, Interaction } = require('discord.js');
 const User = require('../../models/User');
 const Cooldown = require('../../models/Cooldown');
+const Bank = require('../../models/Bank');
 
 const dailyAmount = 1000;
 
@@ -26,6 +27,8 @@ module.exports = {
 
       let cooldown = await Cooldown.findOne({ userId, commandName, guildId });
 
+      let bank = await Cooldown.findOne({ guildId });
+
       if (cooldown && Date.now() < cooldown.endsAt) {
         const { default: prettyMs } = await import('pretty-ms');
 
@@ -33,6 +36,10 @@ module.exports = {
           `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``
         );
         return;
+      }
+
+      if (!bank) {
+        bank = new Cooldown({ guildId });
       }
 
       if (!cooldown) {
@@ -48,6 +55,8 @@ module.exports = {
       const zorocoins = 50;
 
       user.balance = user.balance + zorocoins;
+
+      bank.balance = bank.balance - zorocoins;
 
       cooldown.endsAt = Date.now() + 86_400_000;
       await Promise.all([cooldown.save(), user.save()]);
