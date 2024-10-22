@@ -3,7 +3,7 @@ const User = require('../../models/User');
 const Cooldown = require('../../models/Cooldown');
 const Bank = require('../../models/Bank');
 
-const dailyAmount = 1000;
+const dailyAmount = 5;
 
 module.exports = {
   name: 'daily',
@@ -52,17 +52,15 @@ module.exports = {
         user = new User({ userId, guildId });
       }
 
-      const zorocoins = 50;
+      user.balance = user.balance + dailyAmount;
 
-      user.balance = user.balance + zorocoins;
-
-      bank.balance = bank.balance - zorocoins;
+      bank.balance = bank.balance - dailyAmount;
 
       cooldown.endsAt = Date.now() + 86_400_000;
-      await Promise.all([cooldown.save(), user.save()]);
+      await Promise.all([cooldown.save(), user.save(), bank.save()]);
 
       await interaction.editReply(
-        `You received **${zorocoins}** zorocoins! You now have **${user.balance}** zorocoins.`
+        `You received **${dailyAmount}** zorocoins! You now have **${user.balance}** zorocoins.`
       );
     } catch (error) {
       console.log(`Error with /daily: ${error}`);
