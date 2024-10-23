@@ -1,19 +1,19 @@
 require('dotenv').config();
 const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
-        const commands = [
-            {
-                name: 'addbank',
-                description: 'Add money to the bank.',
-                options: [
-                    {
-                        name: 'zorocoins',
-                        description: 'The number of zorocoins you want to add.',
-                        type: ApplicationCommandOptionType.Number,
-                        required: true,
-                    },
-                ],
-            },
+    const commands = [
+        {
+            name: 'addbank',
+            description: 'Add money to the bank.',
+            options: [
+                {
+                    name: 'zorocoins',
+                    description: 'The number of zorocoins you want to add.',
+                    type: ApplicationCommandOptionType.Number,
+                    required: true,
+                },
+            ],
+        },
             {
                 name: 'balance',
                 description: "See your zorocoins",
@@ -55,24 +55,24 @@ const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
                 name: 'play',
                 description: '50% chance to win 100 zorocoins !',              
             },
-        ];
+    ];
 
-        const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
-        (async () => {
-          try {
-            console.log('Registering slash commands...');
+(async () => {
+    try {
+        console.log('Registering slash commands...');
         
-            await rest.put(
-              Routes.applicationGuildCommands(
+        await rest.put(
+            Routes.applicationGuildCommands(
                 process.env.CLIENT_ID,
                 process.env.GUILD_ID
-              ),
-              { body: commands }
-            );
+            ),
+            { body: commands }
+        );
         
-            console.log('Slash commands were registered successfully!');
-          } catch (error) {
-            console.log(`There was an error: ${error}`);
-          }
-        })();
+        console.log('Slash commands were registered successfully!');
+    } catch (error) {
+        console.log(`There was an error: ${error}`);
+    }
+})();

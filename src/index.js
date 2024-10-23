@@ -86,7 +86,7 @@ client.on('interactionCreate', async (interaction) => {
       
         const balance = user.balance;
       
-        interaction.editReply(`You have **${balance}** zorocoins.`);
+        interaction.reply(`You have **${balance}** zorocoins.`);
     }
 
     if (interaction.commandName === "daily") {
@@ -114,7 +114,7 @@ client.on('interactionCreate', async (interaction) => {
             if (cooldown && Date.now() < cooldown.endsAt) {
               const { default: prettyMs } = await import('pretty-ms');
       
-              await interaction.editReply(
+              await interaction.reply(
                 `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``
               );
               return;
@@ -160,7 +160,7 @@ client.on('interactionCreate', async (interaction) => {
             const zorocoinsToGive = interaction.options.getNumber('zorocoins');
       
             if (giverId === receiverId) {
-              await interaction.editReply('You cannot give zorocoins to yourself!');
+              await interaction.reply('You cannot give zorocoins to yourself!');
               return;
             }
       
@@ -172,13 +172,13 @@ client.on('interactionCreate', async (interaction) => {
       
             // Check if both users exist
             if (!giver || !receiver) {
-              await interaction.editReply(`Both the giver and receiver need to have profiles to complete the transaction.`);
+              await interaction.reply(`Both the giver and receiver need to have profiles to complete the transaction.`);
               return;
             }
       
             // Check if the giver has enough zorocoins
             if (giver.balance < zorocoinsToGive) {
-              await interaction.editReply('You do not have enough zorocoins to give.');
+              await interaction.reply('You do not have enough zorocoins to give.');
               return;
             }
       
@@ -193,7 +193,7 @@ client.on('interactionCreate', async (interaction) => {
             );
           } catch (error) {
             console.log(`Error with /give: ${error}`);
-            await interaction.editReply('An error occurred while processing the transaction.');
+            await interaction.reply('An error occurred while processing the transaction.');
           }
     }
 
@@ -214,7 +214,7 @@ client.on('interactionCreate', async (interaction) => {
             const bank = await Bank.findOne({ guildId: interaction.guild.id });
       
             if (topUsers.length === 0) {
-              await interaction.editReply('No users found in the leaderboard.');
+              await interaction.reply('No users found in the leaderboard.');
               return;
             }
       
@@ -228,7 +228,7 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.reply(`**Bank**\n${bank.balance}\n**Zorocoins Leaderboard**\n${leaderboard.join('\n')}`);
           } catch (error) {
             console.log(`Error with /leaderboard: ${error}`);
-            await interaction.editReply('An error occurred while fetching the leaderboard.');
+            await interaction.reply('An error occurred while fetching the leaderboard.');
           }
     }
 
@@ -251,10 +251,17 @@ client.on('interactionCreate', async (interaction) => {
             if (cooldown && Date.now() < cooldown.endsAt) {
               const { default: prettyMs } = await import('pretty-ms');
       
-              await interaction.editReply(
+              await interaction.reply(
                 `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``
               );
               return;
+            }
+
+            const zorocoins = 50;
+
+            if (user.balance < zorocoins) {
+                await interaction.reply('You do not have enough zorocoins to play.');
+                return;
             }
       
             if (!cooldown) {
@@ -266,8 +273,6 @@ client.on('interactionCreate', async (interaction) => {
             if (!user) {
               user = new User({ userId, guildId });
             }
-      
-            const zorocoins = 50;
       
             cooldown.endsAt = Date.now() + 86_400_000;
       
