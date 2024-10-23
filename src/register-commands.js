@@ -1,19 +1,19 @@
 require('dotenv').config();
 const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
-    const commands = [
-        {
-            name: 'addbank',
-            description: 'Add money to the bank.',
-            options: [
-                {
-                    name: 'zorocoins',
-                    description: 'The number of zorocoins you want to add.',
-                    type: ApplicationCommandOptionType.Number,
-                    required: true,
-                },
-            ],
-        },
+const commands = [
+    {
+        name: 'addbank',
+        description: 'Add money to the bank.',
+        options: [
+            {
+                name: 'zorocoins',
+                description: 'The number of zorocoins you want to add.',
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+        ],
+    },
             {
                 name: 'balance',
                 description: "See your zorocoins",
@@ -54,8 +54,38 @@ const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
             {
                 name: 'play',
                 description: '50% chance to win 100 zorocoins !',              
+    },
+    {
+        name: 'bet',
+        description: 'Create a bet and specify two options to wager on.',
+        options: [
+            {
+                name: 'zorocoins',
+                description: 'The number of zorocoins you want to bet.',
+                type: ApplicationCommandOptionType.Number,
+                required: true,
             },
-    ];
+            {
+                name: 'title',
+                description: 'The title or description of the bet.',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+            {
+                name: 'option1',
+                description: 'The first option for the bet.',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+            {
+                name: 'option2',
+                description: 'The second option for the bet.',
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+        ],
+    }
+];
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
