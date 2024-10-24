@@ -84,9 +84,21 @@ client.on('interactionCreate', async (interaction) => {
             return;
         }
       
-        const balance = user.balance;
-      
-        interaction.reply(`You have **${balance}** zorocoins.`);
+        const userBalance = user.balance;
+
+        // Fetch the user's balance in the bank
+        const bank = await Bank.findOne({ guildId: guildId });
+        if (!bank) {
+            interaction.reply("The bank hasn't been initialized yet.");
+            return;
+        }
+
+        const member = await interaction.guild.members.fetch(targetUserId);
+        const displayName = member.displayName;
+
+        interaction.reply(
+            `${displayName} has **${userBalance}** zorocoins in their balance.`
+        );
     }
 
     if (interaction.commandName === "daily") {
@@ -179,6 +191,11 @@ client.on('interactionCreate', async (interaction) => {
             // Check if the giver has enough zorocoins
             if (giver.balance < zorocoinsToGive) {
               await interaction.reply('You do not have enough zorocoins to give.');
+              return;
+            }
+
+            if(zorocoinsToGive < 0) {
+              await interaction.reply('FUCK YOU');
               return;
             }
       
@@ -313,9 +330,8 @@ client.on('interactionCreate', async (interaction) => {
       );
   
       await interaction.reply({ embeds: [embed], components: [buttons, adminButtons] });
-    }
-  
-    if (!interaction.isButton()) return;
+
+      if (!interaction.isButton()) return;
   
     const [action, option, betId] = interaction.customId.split('_');
   
@@ -346,41 +362,118 @@ client.on('interactionCreate', async (interaction) => {
       await bet.save();
       await interaction.reply({ content: `You bet **${zorocoins}** zorocoins on ${bet[option]}.`, ephemeral: true });
     }
-  
-    if (action === 'bet_win') {
-      if (!interaction.member.permissions.has('ADMINISTRATOR')) {
-        return interaction.reply({ content: 'Only admins can declare the winner.', ephemeral: true });
-      }
-  
-      const bet = await Bet.findById(betId);
-      const winningOption = option === 'option1' ? 'option1' : 'option2';
-  
-      if (!bet.isActive) {
-        return interaction.reply({ content: 'This bet has already been closed.', ephemeral: true });
-      }
-  
-      // Calculate the total bet on both sides
-      const totalBetOption1 = bet.bets.option1.reduce((acc, cur) => acc + cur.amount, 0);
-      const totalBetOption2 = bet.bets.option2.reduce((acc, cur) => acc + cur.amount, 0);
-      const totalPool = totalBetOption1 + totalBetOption2;
-  
-      // Find the winning users and calculate their reward
-      const winningBets = bet.bets[winningOption];
-      const totalWinningBet = winningBets.reduce((acc, cur) => acc + cur.amount, 0);
-  
-      for (const winner of winningBets) {
-        const user = await User.findOne({ userId: winner.userId, guildId: interaction.guild.id });
-        const reward = Math.floor((winner.amount / totalWinningBet) * totalPool);
-        user.balance += reward;
-        await user.save();
-  
-        const discordUser = await client.users.fetch(user.userId);
-        await discordUser.send(`Congratulations! You won **${reward}** zorocoins from the bet "${bet.title}".`);
-      }
-  
-      bet.isActive = false;
-      await bet.save();
-  
-      await interaction.reply(`Bet "${bet.title}" is closed. ${bet[winningOption]} wins!`);
     }
+
+    if (interaction.commandName === 'give_bank') {
+      if (!interaction.inGuild()) {
+        interaction.reply({
+          content: 'You can only run this command inside a server.',
+          ephemeral: true,
+        });
+        return;
+      }
+  
+      try {
+        const userId = interaction.member.id; // Get the user's ID
+        const guildId = interaction.guild.id; // Get the guild's ID
+        const depositAmount = interaction.options.getNumber('zorocoins'); // Get the number of zorocoins to deposit
+  
+        if (depositAmount <= 0) {
+          await interaction.reply('Please enter a valid number of zorocoins.');
+          return;
+        }
+  
+        const user = await User.findOne({ userId, guildId });
+        let bank = await Bank.findOne({ guildId });
+  
+        if (!user) {
+          await interaction.reply("You don't have an account yet.");
+          return;
+        }
+  
+        if (!bank) {
+          bank = new Bank({ guildId });
+        }
+  
+        if (user.balance < depositAmount) {
+          await interaction.reply('You do not have enough zorocoins to deposit.');
+          return;
+        }
+
+        user.balance -= depositAmount; // Deduct from user's balance
+        bank.balance += depositAmount; // Add to the bank's total balance
+  
+        await Promise.all([user.save(), bank.save()]); // Save both user and bank
+  
+        await interaction.reply(
+          `You have successfully transfered **${depositAmount}** zorocoins into the bank. You now have **${user.balance}** zorocoins left.`
+        );
+      } catch (error) {
+        console.log(`Error with /deposit: ${error}`);
+        await interaction.reply('An error occurred while processing the deposit.');
+      }
+    }
+
+    if (interaction.commandName === 'bank_transfer') {
+      if (!interaction.member.permissions.has('Administrator')) {
+        interaction.reply({
+            content: 'You do not have permission to use this command. Only admins can use it.',
+        });
+        return;
+      }
+
+      if (!interaction.inGuild()) {
+        interaction.reply({
+          content: 'You can only run this command inside a server.',
+          ephemeral: true,
+        });
+        return;
+      }
+  
+      try {
+        const userId = interaction.member.id; // Get the user's ID
+        const guildId = interaction.guild.id; // Get the guild's ID
+        const depositAmount = interaction.options.getNumber('zorocoins');
+        const receiverId = interaction.options.getUser('user').id;
+  
+        if (depositAmount <= 0) {
+          await interaction.reply('Please enter a valid number of zorocoins.');
+          return;
+        }
+  
+        const user = await User.findOne({ userId, guildId });
+        let bank = await Bank.findOne({ guildId });
+  
+        if (!user) {
+          await interaction.reply("You don't have an account yet.");
+          return;
+        }
+  
+        if (!bank) {
+          bank = new Bank({ guildId });
+        }
+  
+        if (bank.balance < depositAmount) {
+          await interaction.reply('You do not have enough zorocoins in the bank to transfer.');
+          return;
+        }
+
+        user.balance += depositAmount; // Deduct from user's balance
+        bank.balance -= depositAmount; // Add to the bank's total balance
+  
+        await Promise.all([user.save(), bank.save()]); // Save both user and bank
+
+        const member = await interaction.guild.members.fetch(receiverId);
+        const displayName = member.displayName;
+  
+        await interaction.reply(
+          `You have successfully transfered **${depositAmount}** zorocoins to ${displayName}. The bank has **${bank.balance}** zorocoins left.`
+        );
+      } catch (error) {
+        console.log(`Error with /deposit: ${error}`);
+        await interaction.reply('An error occurred while processing the deposit.');
+      }
+    }
+
+    
 });

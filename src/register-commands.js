@@ -85,6 +85,36 @@ const commands = [
             },
         ],
     }*/
+    {
+        name: 'give_bank',
+        description: "Pay the bank.",
+        options: [
+            {
+                name: 'zorocoins',
+                description: 'The number of zorocoins you want to give to the bank.',
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+        ],
+    },
+    {
+        name: 'bank_transfer',
+        description: "Give someone money from the bank.",
+        options: [
+            {
+                name: 'zorocoins',
+                description: 'The number of zorocoins you want to give to the bank.',
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+            {
+                name: 'user',
+                description: 'The user who will get the zorocoins.',
+                type: ApplicationCommandOptionType.User,
+                required: true,
+            },
+        ],
+    },
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
