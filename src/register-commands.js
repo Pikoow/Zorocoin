@@ -55,7 +55,7 @@ const commands = [
                 name: 'play',
                 description: '50% chance to win 100 zorocoins !',              
     },
-    {
+    /*{
         name: 'bet',
         description: 'Create a bet and specify two options to wager on.',
         options: [
@@ -84,7 +84,7 @@ const commands = [
                 required: true,
             },
         ],
-    }
+    }*/
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
