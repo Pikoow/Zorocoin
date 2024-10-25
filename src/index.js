@@ -78,9 +78,15 @@ client.on('interactionCreate', async (interaction) => {
         const guildId = interaction.guild.id;
             
         const user = await User.findOne({ userId: targetUserId, guildId: guildId });
+
+        const member = await interaction.guild.members.fetch(targetUserId);
+        const displayName = member.displayName;
       
         if (!user) {
-            interaction.reply(`<@${targetUserId}> doesn't have a balance yet.`);
+            interaction.reply({
+              content: `${displayName} doesn't have a balance yet.`,
+              ephemeral: true
+            });
             return;
         }
       
@@ -93,11 +99,8 @@ client.on('interactionCreate', async (interaction) => {
             return;
         }
 
-        const member = await interaction.guild.members.fetch(targetUserId);
-        const displayName = member.displayName;
-
         interaction.reply(
-            `${displayName} has **${userBalance}** zorocoins in their balance.`
+          `${displayName} has **${userBalance}** zorocoins in their balance.`
         );
     }
 
@@ -126,9 +129,10 @@ client.on('interactionCreate', async (interaction) => {
             if (cooldown && Date.now() < cooldown.endsAt) {
               const { default: prettyMs } = await import('pretty-ms');
       
-              await interaction.reply(
-                `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``
-              );
+              await interaction.reply({
+                content: `You are on cooldown, come back after \`${prettyMs(cooldown.endsAt - Date.now(), {verbose: true})}\``,
+                ephemeral: true
+              });
               return;
             }
       
@@ -332,36 +336,36 @@ client.on('interactionCreate', async (interaction) => {
       await interaction.reply({ embeds: [embed], components: [buttons, adminButtons] });
 
       if (!interaction.isButton()) return;
+
+      const [action, option, betId] = interaction.customId.split('_');
   
-    const [action, option, betId] = interaction.customId.split('_');
-  
-    if (action === 'bet') {
-      const bet = await Bet.findById(betId);
-      const userId = interaction.user.id;
-  
-      if (!bet.isActive) {
-        return interaction.reply({ content: 'Betting is closed for this event.', ephemeral: true });
-      }
+      if (action === 'bet') {
+        const bet = await Bet.findById(betId);
+        const userId = interaction.user.id;
     
-      // Fetch user and deduct zorocoins
-      const user = await User.findOne({ userId, guildId: interaction.guild.id });
-      if (!user || user.balance < zorocoins) {
-        return interaction.reply({ content: 'You do not have enough zorocoins.', ephemeral: true });
+        if (!bet.isActive) {
+          return interaction.reply({ content: 'Betting is closed for this event.', ephemeral: true });
+        }
+      
+        // Fetch user and deduct zorocoins
+        const user = await User.findOne({ userId, guildId: interaction.guild.id });
+        if (!user || user.balance < zorocoins) {
+          return interaction.reply({ content: 'You do not have enough zorocoins.', ephemeral: true });
+        }
+    
+        user.balance -= zorocoins;
+        await user.save();
+    
+        // Add user to the correct bet option
+        if (option === 'option1') {
+          bet.bets.option1.push({ userId, amount: zorocoins });
+        } else {
+          bet.bets.option2.push({ userId, amount: zorocoins });
+        }
+    
+        await bet.save();
+        await interaction.reply({ content: `You bet **${zorocoins}** zorocoins on ${bet[option]}.`, ephemeral: true });
       }
-  
-      user.balance -= zorocoins;
-      await user.save();
-  
-      // Add user to the correct bet option
-      if (option === 'option1') {
-        bet.bets.option1.push({ userId, amount: zorocoins });
-      } else {
-        bet.bets.option2.push({ userId, amount: zorocoins });
-      }
-  
-      await bet.save();
-      await interaction.reply({ content: `You bet **${zorocoins}** zorocoins on ${bet[option]}.`, ephemeral: true });
-    }
     }
 
     if (interaction.commandName === 'give_bank') {
