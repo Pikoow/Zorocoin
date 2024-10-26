@@ -173,7 +173,7 @@ client.on('interactionCreate', async (interaction) => {
           try {      
             const giverId = interaction.member.id;
             const receiverId = interaction.options.getUser('user').id;
-            const zorocoinsToGive = interaction.options.getNumber('zorocoins');
+            const zorocoinsToGive = Math.floor(interaction.options.getNumber('zorocoins'));
       
             if (giverId === receiverId) {
               await interaction.reply('You cannot give zorocoins to yourself!');
