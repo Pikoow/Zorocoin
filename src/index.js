@@ -435,10 +435,9 @@ client.on('interactionCreate', async (interaction) => {
       }
   
       try {
-        const userId = interaction.member.id; // Get the user's ID
+        const userId = interaction.options.getUser('user').id; // Get the user's ID
         const guildId = interaction.guild.id; // Get the guild's ID
         const depositAmount = interaction.options.getNumber('zorocoins');
-        const receiverId = interaction.options.getUser('user').id;
   
         if (depositAmount <= 0) {
           await interaction.reply('Please enter a valid number of zorocoins.');
