@@ -44,7 +44,7 @@ client.on('interactionCreate', async (interaction) => {
       
           try {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
             const guildId = interaction.guild.id;
@@ -79,7 +79,7 @@ return;
         }
 
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
       
@@ -124,7 +124,7 @@ return;
       
           try {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
             const commandName = 'daily';
@@ -185,7 +185,7 @@ return;
       
           try {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
             const giverId = interaction.member.id;
@@ -246,7 +246,7 @@ return;
       
           try {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
             const topUsers = await User.find({ guildId: interaction.guild.id })
@@ -285,7 +285,7 @@ return;
   
       try {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
           const userId = interaction.user.id;
@@ -328,7 +328,7 @@ return;
 
     if (interaction.commandName === 'bet') {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
       const zorocoins = interaction.options.getNumber('zorocoins');
@@ -399,7 +399,7 @@ return;
 
     if (interaction.commandName === 'give_bank') {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
       if (!interaction.inGuild()) {
@@ -453,7 +453,7 @@ return;
 
     if (interaction.commandName === 'bank_transfer') {
 await interaction.reply(
-              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+              `Zorocoin has been discontinued, thanks for understanding and stay tuned for Zorocoin 2.`
             );
 return;
       if (!interaction.member.permissions.has('Administrator')) {
