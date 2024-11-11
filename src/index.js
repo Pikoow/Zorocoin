@@ -42,7 +42,11 @@ client.on('interactionCreate', async (interaction) => {
             return;
           }
       
-          try {      
+          try {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
             const guildId = interaction.guild.id;
       
             let bank = await Bank.findOne({ guildId: guildId });
@@ -73,6 +77,11 @@ client.on('interactionCreate', async (interaction) => {
             });
             return;
         }
+
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
       
         const targetUserId = interaction.options.get('user')?.value || interaction.member.id;
         const guildId = interaction.guild.id;
@@ -113,7 +122,11 @@ client.on('interactionCreate', async (interaction) => {
             return;
           }
       
-          try {      
+          try {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
             const commandName = 'daily';
             const userId = interaction.user.id;
             const guildId = interaction.guild.id;
@@ -170,7 +183,11 @@ client.on('interactionCreate', async (interaction) => {
             return;
           }
       
-          try {      
+          try {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
             const giverId = interaction.member.id;
             const receiverId = interaction.options.getUser('user').id;
             const zorocoinsToGive = Math.floor(interaction.options.getNumber('zorocoins'));
@@ -227,7 +244,11 @@ client.on('interactionCreate', async (interaction) => {
             return;
           }
       
-          try {      
+          try {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
             const topUsers = await User.find({ guildId: interaction.guild.id })
               .sort({ balance: -1 })
               .limit(10);
@@ -262,7 +283,11 @@ client.on('interactionCreate', async (interaction) => {
           return;
       }
   
-      try {      
+      try {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
           const userId = interaction.user.id;
           const guildId = interaction.guild.id;
           const zorocoins = interaction.options.getNumber('zorocoins');
@@ -302,6 +327,10 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if (interaction.commandName === 'bet') {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
       const zorocoins = interaction.options.getNumber('zorocoins');
       const title = interaction.options.getString('title');
       const option1 = interaction.options.getString('option1');
@@ -369,6 +398,10 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if (interaction.commandName === 'give_bank') {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
       if (!interaction.inGuild()) {
         interaction.reply({
           content: 'You can only run this command inside a server.',
@@ -419,6 +452,10 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     if (interaction.commandName === 'bank_transfer') {
+await interaction.reply(
+              `Zorocoin has been discontinued, thanks for understanding and stayed tuned for Zorocoin 2.`
+            );
+return;
       if (!interaction.member.permissions.has('Administrator')) {
         interaction.reply({
             content: 'You do not have permission to use this command. Only admins can use it.',
