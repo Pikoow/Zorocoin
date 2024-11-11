@@ -54,7 +54,15 @@ const commands = [
             {
                 name: 'play',
                 description: '50% chance to win 100 zorocoins !',              
-    },
+    options: [
+            {
+                name: 'zorocoins',
+                description: 'The number of zorocoins you want to bet.',
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+]
+},
     /*{
         name: 'bet',
         description: 'Create a bet and specify two options to wager on.',
