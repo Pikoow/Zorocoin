@@ -265,7 +265,7 @@ client.on('interactionCreate', async (interaction) => {
       try {      
           const userId = interaction.user.id;
           const guildId = interaction.guild.id;
-          const zorocoins = 50;
+          const zorocoins = interaction.options.getNumber('zorocoins');
   
           let user = await User.findOne({ userId, guildId });
   
